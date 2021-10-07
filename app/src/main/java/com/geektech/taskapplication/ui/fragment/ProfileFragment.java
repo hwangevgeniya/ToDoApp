@@ -16,11 +16,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 
-import com.geektech.taskapplication.MainActivity;
-import com.geektech.taskapplication.R;
-import com.geektech.taskapplication.TaskFragment;
 import com.geektech.taskapplication.databinding.FragmentProfileBinding;
 
 import org.jetbrains.annotations.NotNull;
