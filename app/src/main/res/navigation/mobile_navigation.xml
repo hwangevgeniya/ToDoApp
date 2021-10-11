@@ -32,4 +32,9 @@
         android:name="com.geektech.taskapplication.ui.fragment.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/boardFragment"
+        android:name="com.geektech.taskapplication.ui.board.BoardFragment"
+        android:label="fragment_board"
+        tools:layout="@layout/fragment_board" />
 </navigation>

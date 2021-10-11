@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.geektech.taskapplication.R;
 import com.geektech.taskapplication.databinding.FragmentHomeBinding;
+import com.geektech.taskapplication.databinding.ListNewsBinding;
 import com.geektech.taskapplication.ui.models.News;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -74,8 +75,6 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
                 }
             }
         });
-
-
         initList();
     }
 
@@ -97,6 +96,7 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
         isChanged = true;
         News news = adapter.getItem(position);
         openFragment(news);
+
     }
 
     @Override
