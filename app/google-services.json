@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "277019339997",
+    "project_id": "taskapplication-54adf",
+    "storage_bucket": "taskapplication-54adf.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:277019339997:android:94e3b7f5c605865b96bf34",
+        "android_client_info": {
+          "package_name": "com.geektech.taskapplication"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "277019339997-26o0hamo6iqnlfl04m7v749u720d6hkd.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.geektech.taskapplication",
+            "certificate_hash": "745d9aabe342d79788fcab0c918e1a6cad9998af"
+          }
+        },
+        {
+          "client_id": "277019339997-1d2dq6crntakg6iag33imtnbpo5et98q.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDa5vCPwfaUKsu_XacsceGzgFoBtCoKV8A"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "277019339997-1d2dq6crntakg6iag33imtnbpo5et98q.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

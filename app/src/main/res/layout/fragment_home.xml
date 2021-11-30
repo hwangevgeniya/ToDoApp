@@ -22,4 +22,14 @@
         android:layout_margin="16dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btnMenuSort"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="MENU"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/fab"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -22,6 +22,7 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.geektech.taskapplication.Prefs;
 import com.geektech.taskapplication.R;
 import com.geektech.taskapplication.databinding.FragmentBoardBinding;
 import com.geektech.taskapplication.ui.home.HomeFragment;
@@ -81,6 +82,8 @@ public class BoardFragment extends Fragment {
     }
 
     private void navigateUp(){
+        Prefs prefs = new Prefs(requireContext());
+        prefs.saveBoardState();
         NavController navController = Navigation.findNavController(requireActivity(), R.id.nav_host_fragment_activity_main);
         navController.navigateUp();
     }

@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,15 +20,17 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.geektech.taskapplication.App;
 import com.geektech.taskapplication.R;
 import com.geektech.taskapplication.databinding.FragmentHomeBinding;
 import com.geektech.taskapplication.databinding.ListNewsBinding;
+import com.geektech.taskapplication.ui.interfaces.OnItemClickListener;
 import com.geektech.taskapplication.ui.models.News;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import org.jetbrains.annotations.NotNull;
 
-public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickListener {
+public class HomeFragment extends Fragment implements OnItemClickListener {
 
     //private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
@@ -35,21 +38,25 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
     private NewsAdapter adapter;
     private boolean isChanged = false;
     private int position;
+    int count = 0;
 
 
     @Override
     public void onCreate(@Nullable @org.jetbrains.annotations.Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new NewsAdapter();
+        adapter.addItems(App.getInstance().getDatabase().newsDao().getAllSortedByTitle());
+        //adapter.addItems(App.getInstance().getDatabase().newsDao().getAll());
+
     }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
-
-        return root;
+//        View root = binding.getRoot();
+//        return root;
+        return binding.getRoot();
     }
 
     @Override
@@ -67,16 +74,25 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
             @Override
             public void onFragmentResult(@NonNull @NotNull String requestKey, @NonNull @NotNull Bundle result) {
                 News news = (News) result.getSerializable("news");
-                if (isChanged){
+                Log.e("Home", "result = " + news.getTitle());
+                if (isChanged) {
                     adapter.updateItem(news, position);
-                }
-                else {
+                } else {
                     adapter.addItem(news);
                 }
             }
         });
         initList();
+
+        binding.btnMenuSort.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                menuSort();
+                Toast.makeText(requireActivity(), "Hello" + count, Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
 
     private void initList() {
         adapter.setListener(this);
@@ -101,6 +117,7 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
 
     @Override
     public void onLongClick(int position) {
+        App.getInstance().getDatabase().newsDao().delete(adapter.getItem(position));
         News news = adapter.getItem(position);
         new AlertDialog.Builder(requireContext())
                 .setTitle("Удаление")
@@ -112,5 +129,20 @@ public class HomeFragment extends Fragment implements NewsAdapter.OnItemClickLis
                         adapter.removeItem(position);
                     }
                 }).show();
+    }
+
+
+    public void menuSort() {
+        count++;
+        for (int i = 0; i < 1; i++) {
+            if (count % 2 == 0) {
+//                adapter.addItems(App.getInstance().getDatabase().newsDao().getAllSortedByTitle());
+                adapter.setList(App.getInstance().getDatabase().newsDao().getAllSortedByTitle());
+            } else {
+//                adapter.addItems(App.getInstance().getDatabase().newsDao().getAll());
+                adapter.setList(App.getInstance().getDatabase().newsDao().getAll());
+            }
+            binding.recyclerView.setAdapter(adapter);
+        }
     }
 }

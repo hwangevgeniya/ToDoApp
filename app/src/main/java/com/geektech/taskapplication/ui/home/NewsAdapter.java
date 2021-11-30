@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.geektech.taskapplication.R;
 import com.geektech.taskapplication.databinding.ListNewsBinding;
+import com.geektech.taskapplication.ui.interfaces.OnItemClickListener;
 import com.geektech.taskapplication.ui.models.News;
 import com.google.android.material.timepicker.TimeFormat;
 
@@ -24,6 +25,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 
@@ -40,7 +42,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull @NotNull ViewGroup parent, int viewType) {
         //View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_news,parent,false);
         //return new ViewHolder(view);
-        return new ViewHolder(ListNewsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false));
+        binding = ListNewsBinding.inflate(LayoutInflater.from(parent.getContext()), parent, false);
+        return new ViewHolder(binding);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.N)
@@ -66,6 +69,11 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
 
     }
 
+    public void setList(List<News> list) {
+        this.list = (ArrayList<News>) list;
+        notifyDataSetChanged();
+    }
+
     public void addItem(News news) {
         list.add(0, news);
         //notifyDataSetChanged();
@@ -87,11 +95,18 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
         notifyItemChanged(position);
     }
 
+
+
+    public void addItems(List<News> newsList) {
+        list.clear();
+        list.addAll(0, newsList);
+        notifyDataSetChanged();
+    }
+
     public class ViewHolder extends RecyclerView.ViewHolder {
 
         public ViewHolder(@NonNull ListNewsBinding itemView) {
             super(itemView.getRoot());
-            binding = itemView;
 
         }
 
@@ -105,6 +120,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
                 @Override
                 public boolean onLongClick(View v) {
                     listener.onLongClick(getAdapterPosition());
+
                     return true;
                 }
             });
@@ -117,11 +133,5 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             });
         }
 
-    }
-
-    public interface OnItemClickListener {
-        void onClick(int position);
-
-        void onLongClick(int position);
     }
 }
