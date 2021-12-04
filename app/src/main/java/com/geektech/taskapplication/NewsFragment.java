@@ -98,18 +98,16 @@ public class NewsFragment extends Fragment {
         showProgress();
         reference.putFile(uri)
 
-                .continueWithTask(task -> reference.getDownloadUrl())
+                .continueWithTask(task -> {
+                    imageUri = reference.getDownloadUrl().toString();
+                    //com.google.android.gms.tasks.zzu@ac33b80
+                    return reference.getDownloadUrl();
+                })
 
                 .addOnCompleteListener(taskSnapshot -> {
                     imageUri = taskSnapshot.getResult().toString();
                     hideProgress();
                 });
-    }
-
-    private void saveImageToFirestoreStorage() {
-        binding.imageView.setOnClickListener(v -> {
-            registerForActivityResult.launch(new Intent().setAction(Intent.ACTION_PICK).setType("image/*"));
-        });
     }
 
     private void sendData() {/*
@@ -150,6 +148,12 @@ public class NewsFragment extends Fragment {
         bundle.putSerializable("news", news);
         getParentFragmentManager().setFragmentResult("rk_news", bundle);
         //close();
+    }
+
+    private void saveImageToFirestoreStorage() {
+        binding.imageView.setOnClickListener(v -> {
+            registerForActivityResult.launch(new Intent().setAction(Intent.ACTION_PICK).setType("image/*"));
+        });
     }
 
     private void showProgress() {
