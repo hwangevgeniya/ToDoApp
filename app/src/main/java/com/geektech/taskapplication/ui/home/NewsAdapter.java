@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.geektech.taskapplication.R;
 import com.geektech.taskapplication.databinding.ListNewsBinding;
 import com.geektech.taskapplication.ui.interfaces.OnItemClickListener;
@@ -96,7 +97,6 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
     }
 
 
-
     public void addItems(List<News> newsList) {
         list.clear();
         list.addAll(0, newsList);
@@ -115,7 +115,9 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.ViewHolder> {
             String time = new SimpleDateFormat("HH:mm:ss").format(news.getTime());
             binding.textTitle.setText(news.getTitle());
             binding.timeTitle.setText(time);
-
+            Glide.with(binding.getRoot())
+                    .load(news.getUri())
+                    .into(binding.newsImage);
             binding.getRoot().setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {

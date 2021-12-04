@@ -1,24 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:padding="16dp">
 
     <TextView
         android:id="@+id/textTitle"
-        tools:text="Title"
         android:layout_width="300dp"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        tools:text="Title" />
 
     <TextView
         android:id="@+id/timeTitle"
-        tools:text="Time"
-        android:textAlignment="textEnd"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        />
+        android:textAlignment="textEnd"
+        tools:text="Time" />
 
-
+    <ImageView
+        android:id="@+id/news_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp" />
 
 </LinearLayout>

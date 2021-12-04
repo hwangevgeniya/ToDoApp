@@ -1,6 +1,9 @@
 package com.geektech.taskapplication;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResult;
@@ -14,21 +17,32 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
 
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.geektech.taskapplication.databinding.FragmentNewsBinding;
 import com.geektech.taskapplication.ui.models.News;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.text.DateFormat;
 import java.util.Objects;
 
@@ -36,16 +50,10 @@ public class NewsFragment extends Fragment {
 
     FragmentNewsBinding binding;
     News news;
-    private final ActivityResultLauncher<Intent> registerForActivityResult = registerForActivityResult(
-            new ActivityResultContracts.StartActivityForResult(),
-            new ActivityResultCallback<ActivityResult>() {
-                @Override
-                public void onActivityResult(ActivityResult result) {
+    private ActivityResultLauncher<Intent> registerForActivityResult;
+    private String imageUri;
 
-                }
-            });
-
-                @Override
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
@@ -67,6 +75,35 @@ public class NewsFragment extends Fragment {
         binding.btnSave.setOnClickListener(v -> {
             sendData();
         });
+
+        registerForActivityResult = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                new ActivityResultCallback<ActivityResult>() {
+                    @Override
+                    public void onActivityResult(ActivityResult result) {
+                        if (result.getData() != null) {
+                            imageUri = result.getData().getData().toString();
+                            Glide.with(binding.getRoot())
+                                    .load(result.getData().getData())
+                                    .into(binding.imageView);
+                        }
+                    }
+                });
+    }
+
+    private void uploadImageToFirestore(Uri uri) {
+        StorageReference reference = FirebaseStorage.getInstance()
+                .getReference()
+                .child("image/" + FirebaseAuth.getInstance().getUid() + "/" + uri.getLastPathSegment() + ".jpg");
+        showProgress();
+        reference.putFile(uri)
+
+                .continueWithTask(task -> reference.getDownloadUrl())
+
+                .addOnCompleteListener(taskSnapshot -> {
+                    imageUri = taskSnapshot.getResult().toString();
+                    hideProgress();
+                });
     }
 
     private void saveImageToFirestoreStorage() {
@@ -75,17 +112,39 @@ public class NewsFragment extends Fragment {
         });
     }
 
-    private void sendData() {
+    private void sendData() {/*
         showProgress();
         String text = Objects.requireNonNull(binding.editText.getText()).toString();
-        if (news == null) {
-            news = new News(text, System.currentTimeMillis());
-            App.getInstance().getDatabase().newsDao().insert(news);
-            saveToFirestore(news);
-        } else {
+        if (news != null) {
             news.setTitle(text);
             App.getInstance().getDatabase().newsDao().update(news);
             updateItemInFireStore(news);
+        } else {
+            if (!binding.editText.getText().toString().equals("")) {
+                news = new News(text, System.currentTimeMillis());
+                App.getInstance().getDatabase().newsDao().insert(news);
+                saveToFirestore(news);
+            } else {
+                Toast.makeText(requireActivity(), "Add field", Toast.LENGTH_SHORT).show();
+            }
+
+        }*/
+        String etText = binding.editText.getText().toString();
+        if (!etText.equals("") && imageUri != null) {
+            if (news != null) {
+                news.setTitle(etText);
+                App.getInstance().getDatabase().newsDao().update(news);
+                updateItemInFireStore(news);
+            } else {
+                news = new News(etText, System.currentTimeMillis());
+                news.setUri(imageUri);
+                App.getInstance().getDatabase().newsDao().insert(news);
+                showProgress();
+                saveToFirestore(news);
+                uploadImageToFirestore(Uri.parse(imageUri));
+            }
+        } else {
+            Toast.makeText(requireActivity(), "Add field", Toast.LENGTH_SHORT).show();
         }
         Bundle bundle = new Bundle();
         bundle.putSerializable("news", news);

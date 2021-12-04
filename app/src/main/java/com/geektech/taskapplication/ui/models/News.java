@@ -12,9 +12,9 @@ public class News implements Serializable {
     private long id;
     private String title;
     private long time;
-    private String docId;
+    private String docId, uri;
 
-    public News(){
+    public News() {
 
     }
 
@@ -23,11 +23,19 @@ public class News implements Serializable {
         this.time = time;
     }
 
-    public String getDocId(){
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
+
+    public String getUri() {
+        return uri;
+    }
+
+    public String getDocId() {
         return docId;
     }
 
-    public void setDocId(String docId){
+    public void setDocId(String docId) {
         this.docId = docId;
     }
 

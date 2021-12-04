@@ -106,7 +106,8 @@ public class DashboardFragment extends Fragment {
     }
 
     private void getDataLive(){
-        FirebaseFirestore.getInstance().collection("news")
+        FirebaseFirestore.getInstance()
+                .collection("news")
                 .orderBy("time", Query.Direction.DESCENDING)
                 .addSnapshotListener(new EventListener<QuerySnapshot>() {
                     @Override
