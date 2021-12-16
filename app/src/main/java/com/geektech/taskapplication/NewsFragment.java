@@ -94,7 +94,7 @@ public class NewsFragment extends Fragment {
     private void uploadImageToFirestore(Uri uri) {
         StorageReference reference = FirebaseStorage.getInstance()
                 .getReference()
-                .child("image/" + FirebaseAuth.getInstance().getUid() + "/" + uri.getLastPathSegment() + ".jpg");
+                .child("image/" );
         showProgress();
         reference.putFile(uri)
 
